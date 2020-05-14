@@ -1,4 +1,5 @@
 .ipynb_checkpoints
+.idea
 catboost_info
 data
 tf-pose-estimation
