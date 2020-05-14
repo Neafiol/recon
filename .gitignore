@@ -5,6 +5,7 @@ data
 tf-pose-estimation
 tf_pose.egg-info
 venv
+__pycache__
 fphotos.csv
 labels.pk
 Learning.ipynb
