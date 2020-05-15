@@ -21,10 +21,13 @@ def load(url):
     name = url.split("/")[-1]
     if name in done:
         return
-    with open(f"data/{name}", "wb") as f:
-        r = requests.get(photo_url + url)
-        f.write(r.content)
-        done.append(name)
+    try:
+        with open(f"data/{name}", "wb") as f:
+            r = requests.get(photo_url + url)
+            f.write(r.content)
+            done.append(name)
+    except Exception as e:
+        print(f"Error {e}: {url}")
 
 
 dnames = [d.split("/")[-1] for d in data[5]]
