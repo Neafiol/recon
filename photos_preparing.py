@@ -41,7 +41,7 @@ import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 import tf_pose
 
-for photo in tqdm(done):
+for i, photo in tqdm(enumerate(done)):
     if photo in photos_name:
         continue
     try:
@@ -54,6 +54,9 @@ for photo in tqdm(done):
         "shape": None
     })
     photos_name.append(photo)
+    if i % 150 == 0:
+        with open("photo.pk", "wb") as f:
+            pickle.dump(photos, f)
 
 with open("photo.pk", "wb") as f:
     pickle.dump(photos, f)

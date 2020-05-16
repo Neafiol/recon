@@ -59,7 +59,7 @@ tensorflow==1.14.0
 tensorflow-estimator==1.14.0
 tensorpack==0.10.1
 termcolor==1.1.0
--e git+https://www.github.com/ildoonet/tf-pose-estimation@9aaf34708e9863eeab9685a7ec52a45f3b576e2d#egg=tf_pose
+-e git+https://github.com/Neafiol/recon.git@c11402576a427050787e4fe5169f9159d4e8522e#egg=tf_pose&subdirectory=tf-pose-estimation
 tifffile==2020.5.11
 tqdm==4.46.0
 urllib3==1.25.9

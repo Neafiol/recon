@@ -3,9 +3,6 @@ import pickle
 
 import numpy as np
 import pandas as pd
-from catboost import CatBoostClassifier
-from imblearn.over_sampling import SMOTE
-from sklearn.model_selection import train_test_split
 
 with open("model.pk", "rb") as f:
     model = pickle.load(f)
