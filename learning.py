@@ -15,6 +15,8 @@ counts = collections.Counter(list(table[8]))
 
 photos = {p["name"]: p for p in photos}
 data = table.to_dict(orient="record")
+print(f"Find classes: {len(set(data[7]))}")
+
 data = [{
     "photo": d[5].split("/")[-1],
     "result": d[7],
@@ -30,6 +32,8 @@ for d in data:
             d["result"] = "Прочее"
         if len(d["points"]):
             res.append(d)
+
+print(f"Dataset: {len(res)}/{len(data)}")
 
 
 def clear(arr):
