@@ -15,7 +15,7 @@ counts = collections.Counter(list(table[7]))
 
 photos = {p["name"]: p for p in photos}
 data = table.to_dict(orient="record")
-print(f"Find classes: {len(set(data[7]))}")
+print(f"Find classes: {len(set(table[7]))}")
 
 data = [{
     "photo": d[5].split("/")[-1],
@@ -29,8 +29,8 @@ for d in data:
         if d["result"] is None:
             continue
         if counts[d["result"]] < 30:
+            print("Skip class", d["result"], counts[d["result"]])
             d["result"] = "Прочее"
-            print("Skip class")
         if len(d["points"]):
             res.append(d)
 
@@ -46,7 +46,7 @@ def clear(arr):
 
 
 labels = list(set([r["result"] for r in res]))
-print("labels:",len(labels))
+print("labels:", len(labels))
 X = np.array([clear(r["points"][0][0]) for r in res])
 Y = np.array([labels.index(r["result"]) for r in res])
 
@@ -75,9 +75,8 @@ y_pred = [model.predict(x) for x in X_validation]
 print(metrics.classification_report(y_validation, y_pred,
                                     digits=3, target_names=labels))
 
-
-with open("model.pk","wb") as f:
+with open("model.pk", "wb") as f:
     pickle.dump(model, f)
 
-with open("labels.pk","wb") as f:
+with open("labels.pk", "wb") as f:
     pickle.dump(labels, f)
