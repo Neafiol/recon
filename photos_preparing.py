@@ -56,10 +56,10 @@ for i, photo in tqdm(enumerate(done)):
     })
     photos_name.append(photo)
     if i % 150 == 0:
-        with open("photo.pk", "wb") as f:
+        with open("photos.pk", "wb") as f:
             pickle.dump(photos, f)
 
-with open("photo.pk", "wb") as f:
+with open("photos.pk", "wb") as f:
     pickle.dump(photos, f)
 
 print("Complete", len(photos))
