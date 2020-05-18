@@ -11,15 +11,15 @@ with open("photos.pk", "rb") as f:
     photos = pickle.load(f)
 
 table = pd.read_csv("photos.csv", header=None)
-counts = collections.Counter(list(table[7]))
+counts = collections.Counter(list(table[8]))
 
 photos = {p["name"]: p for p in photos}
 data = table.to_dict(orient="record")
-print(f"Find classes: {len(set(table[7]))}")
+print(f"Find classes: {len(set(table[8]))}")
 
 data = [{
     "photo": d[5].split("/")[-1],
-    "result": d[7],
+    "result": d[8],
 } for d in data]
 
 res = []
