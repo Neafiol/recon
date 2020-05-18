@@ -48,6 +48,7 @@ for i, photo in tqdm(enumerate(done)):
         coco_style = tf_pose.infer(f"/home/petr/Documents/Projects/Recognition/data/{photo}")
     except Exception as e:
         print(e, f"data/{photo}")
+        continue
     photos.append({
         "name": photo,
         "points": coco_style,
