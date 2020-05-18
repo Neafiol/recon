@@ -30,6 +30,7 @@ for d in data:
             continue
         if counts[d["result"]] < 30:
             d["result"] = "Прочее"
+            print("Skip class")
         if len(d["points"]):
             res.append(d)
 
@@ -45,6 +46,7 @@ def clear(arr):
 
 
 labels = list(set([r["result"] for r in res]))
+print("labels:",len(labels))
 X = np.array([clear(r["points"][0][0]) for r in res])
 Y = np.array([labels.index(r["result"]) for r in res])
 
