@@ -6,6 +6,8 @@ sha256sum Anaconda3-5.1.0-Linux-x86_64.sh
 bash Anaconda3-5.1.0-Linux-x86_64.sh
 conda install -c conda-forge tensorflow=1.14
 
+apt update && apt install -y libsm6 libxext6
+
 
 export LLVM_CONFIG=/usr/bin/llvm-config-7
 git clone https://github.com/Neafiol/recon
@@ -16,6 +18,6 @@ pip3 --default-timeout=1000 install -r requerements.txt
 cd tf-pose-estimation
 python3 setup.py install
 sudo python setup.py install
-pip3 install -r requirements.txt
+pip install -r requerements.txt
 cd models/graph/cmu
 bash download.sh
