@@ -11,7 +11,7 @@ with open("photos.pk", "rb") as f:
     photos = pickle.load(f)
 
 table = pd.read_csv("photos.csv", header=None)
-counts = collections.Counter(list(table[8]))
+counts = collections.Counter(list(table[7]))
 
 photos = {p["name"]: p for p in photos}
 data = table.to_dict(orient="record")
