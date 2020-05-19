@@ -10,16 +10,17 @@ from sklearn.model_selection import train_test_split
 with open("photos.pk", "rb") as f:
     photos = pickle.load(f)
 
+RESULT_COL = 8
 table = pd.read_csv("photos.csv", header=None)
-counts = collections.Counter(list(table[8]))
+counts = collections.Counter(list(table[RESULT_COL]))
 
 photos = {p["name"]: p for p in photos}
 data = table.to_dict(orient="record")
-print(f"Find classes: {len(set(table[8]))}")
+print(f"Find classes: {len(set(table[RESULT_COL]))}")
 
 data = [{
     "photo": d[5].split("/")[-1],
-    "result": d[8],
+    "result": d[RESULT_COL],
 } for d in data]
 
 res = []
@@ -58,7 +59,7 @@ print(X_train.shape, X_validation.shape)
 
 model = CatBoostClassifier(
     thread_count=3,
-    iterations=1500,
+    iterations=1600,
     depth=6,
     use_best_model=True
 )

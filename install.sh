@@ -9,6 +9,7 @@ conda install -c conda-forge tensorflow=1.14
 git clone https://github.com/Neafiol/recon
 pip install cython
 cd recon
+mkdir data
 git clone https://www.github.com/ildoonet/tf-pose-estimation
 pip3 --default-timeout=1000 install -r requerements.txt
 cd tf-pose-estimation

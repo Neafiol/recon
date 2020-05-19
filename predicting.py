@@ -11,14 +11,16 @@ with open("photos.pk", "rb") as f:
 with open("labels.pk", "rb") as f:
     labels = pickle.load(f)
 
+RESULT_COL = 8
 table = pd.read_csv("photos.csv", header=None)
-counts = collections.Counter(list(table[8]))
+counts = collections.Counter(list(table[RESULT_COL]))
+
 
 photos = {p["name"]: p for p in photos}
 data = table.to_dict(orient="record")
 data = [{
     "photo": d[5].split("/")[-1],
-    "result": d[7],
+    "result": d[RESULT_COL],
 } for d in data]
 
 for_predict = []
@@ -49,7 +51,7 @@ full_table = table.to_dict(orient="record")
 for t in full_table:
     name = t[5].split("/")[-1]
     if name in predicted_names:
-        t[8] = predicted_names[name]
+        t[RESULT_COL] = predicted_names[name]
 
 csv = pd.DataFrame.from_dict(full_table)
 csv.to_csv("fphotos.csv",index=False)
