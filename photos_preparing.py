@@ -1,3 +1,4 @@
+import configparser
 import os
 import pickle
 import sys
@@ -16,6 +17,9 @@ data = pd.read_csv("photos.csv", header=None, index_col=0)
 done = os.listdir("data")
 photos_name = [p["name"] for p in photos]
 
+config = configparser.RawConfigParser()
+config.read('config.conf')
+PHOTO_COL = int(config.get("SETTING", "photo_url"))
 
 def load(url):
     name = url.split("/")[-1]
@@ -30,9 +34,9 @@ def load(url):
         print(f"Error {e}: {url}")
 
 
-dnames = [d.split("/")[-1] for d in data[5]]
+dnames = [d.split("/")[-1] for d in data[PHOTO_COL]]
 print("Start loading photos", len(set(dnames) ^ set(done)))
-for p in tqdm(list(data[5][1:])):
+for p in tqdm(list(data[PHOTO_COL][1:])):
     load(p)
 
 print("Start preparing photos:", len(done) - len(photos_name))

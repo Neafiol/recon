@@ -1,4 +1,5 @@
 import collections
+import configparser
 import pickle
 
 import numpy as np
@@ -10,7 +11,11 @@ from sklearn.model_selection import train_test_split
 with open("photos.pk", "rb") as f:
     photos = pickle.load(f)
 
-RESULT_COL = 8
+config = configparser.RawConfigParser()
+config.read('config.conf')
+PHOTO_COL = int(config.get("SETTING", "photo_url"))
+RESULT_COL = int(config.get("SETTING", "result"))
+
 table = pd.read_csv("photos.csv", header=None)
 counts = collections.Counter(list(table[RESULT_COL]))
 
@@ -19,7 +24,7 @@ data = table.to_dict(orient="record")
 print(f"Find classes: {len(set(table[RESULT_COL]))}")
 
 data = [{
-    "photo": d[5].split("/")[-1],
+    "photo": d[PHOTO_COL].split("/")[-1],
     "result": d[RESULT_COL],
 } for d in data]
 

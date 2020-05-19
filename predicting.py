@@ -1,8 +1,14 @@
 import collections
+import configparser
 import pickle
 
 import numpy as np
 import pandas as pd
+
+
+config = configparser.RawConfigParser()
+config.read('config.conf')
+
 
 with open("model.pk", "rb") as f:
     model = pickle.load(f)
@@ -11,7 +17,9 @@ with open("photos.pk", "rb") as f:
 with open("labels.pk", "rb") as f:
     labels = pickle.load(f)
 
-RESULT_COL = 8
+PHOTO_COL = int(config.get("SETTING", "photo_url"))
+RESULT_COL = int(config.get("SETTING", "result"))
+
 table = pd.read_csv("photos.csv", header=None)
 counts = collections.Counter(list(table[RESULT_COL]))
 
@@ -19,7 +27,7 @@ counts = collections.Counter(list(table[RESULT_COL]))
 photos = {p["name"]: p for p in photos}
 data = table.to_dict(orient="record")
 data = [{
-    "photo": d[5].split("/")[-1],
+    "photo": d[PHOTO_COL].split("/")[-1],
     "result": d[RESULT_COL],
 } for d in data]
 
@@ -50,7 +58,7 @@ for r, d in zip(y_pred, data):
 
 full_table = table.to_dict(orient="record")
 for t in full_table:
-    name = t[5].split("/")[-1]
+    name = t[PHOTO_COL].split("/")[-1]
     if name in predicted_names:
         t[RESULT_COL] = predicted_names[name]
 
