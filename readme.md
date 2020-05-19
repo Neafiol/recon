@@ -1,16 +1,26 @@
 Установка
 ==========
-* `sudo apt-get install build-essential libssl-dev libffi-dev python-dev lib32ncurses5-dev python-snappy libllvm-7-ocaml-dev libllvm7 llvm-7 llvm-7-dev llvm-7-doc llvm-7-examples llvm-7-runtime` - скачаем зависимости
-* `export LLVM_CONFIG=/usr/bin/llvm-config-7`
-* `git https://github.com/Neafiol/recon` скачаем код проекта
-* `cd recon`
-* `pip3 install -r requirements.txt` установим зависимости
-* `git clone https://www.github.com/ildoonet/tf-pose-estimation` - скачаем репозиторий для нахождения ключевых точек на фотографиях
-* `cd tf-pose-estimation`
-* `pip3 install cython` - скачаем cython, необходимый для работы tensorflow
-* `sudo python setup.py install` установим скачанную библиотеку
-*  `cd models/graph/cmu`
-* `bash download.sh` - скачаем модельки, которые не влезли на GB
+```bash
+sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install git  libsm6 libxext6 libllvm-7-ocaml-dev libllvm7 llvm-7 llvm-7-dev llvm-7-doc llvm-7-examples llvm-7-runtime build-essential libssl-dev libffi-dev python-dev lib32ncurses5-dev python-snappy
+export LLVM_CONFIG=/usr/bin/llvm-config-7
+curl -O https://repo.anaconda.com/archive/Anaconda3-5.1.0-Linux-x86_64.sh
+sha256sum Anaconda3-5.1.0-Linux-x86_64.sh
+bash Anaconda3-5.1.0-Linux-x86_64.sh
+conda install -c conda-forge tensorflow=1.14
+
+git clone https://github.com/Neafiol/recon
+pip install cython
+cd recon
+mkdir data
+git clone https://www.github.com/ildoonet/tf-pose-estimation
+pip3 --default-timeout=1000 install -r requerements.txt
+cd tf-pose-estimation
+python3 setup.py install
+sudo pip install -e .
+cd models/graph/cmu
+bash download.sh
+```
 
 Разметка
 =========

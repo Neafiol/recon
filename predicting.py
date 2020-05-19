@@ -27,10 +27,11 @@ for_predict = []
 for d in data:
     if d['photo'] in photos:
         d.update(photos[d['photo']])
-        if d["result"] is None:
+        if d["result"] not in labels:
             if len(d["points"]):
                 for_predict.append(d)
 
+print(f"For predict: {len(for_predict)}/{len(data)}")
 
 def clear(arr):
     res = []
