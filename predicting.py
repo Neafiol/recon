@@ -1,5 +1,6 @@
 import collections
 import configparser
+import json
 import pickle
 
 import numpy as np
@@ -57,11 +58,14 @@ for r, d in zip(y_pred, data):
     predicted_names[d["photo"]] = labels[int(r)]
 
 full_table = table.to_dict(orient="record")
-for t in full_table:
-    name = t[PHOTO_COL].split("/")[-1]
-    if name in predicted_names:
-        t[RESULT_COL] = predicted_names[name]
+with open("out.jsonlines","w") as f:
+    for t in full_table:
+        name = t[PHOTO_COL].split("/")[-1]
+        if name in predicted_names:
+            t[RESULT_COL] = predicted_names[name]
+            f.write(json.dumps({"photo":name,"result":predicted_names[name]})+"\n")
 
-csv = pd.DataFrame.from_dict(full_table)
-csv.to_csv("fphotos.csv",index=False)
-print("file fphotos.csv has been created")
+# csv = pd.DataFrame.from_dict(full_table)
+# csv.to_csv("fphotos.csv",index=False)
+# print("file fphotos.csv has been created")
+print("file out.csv has been created")
