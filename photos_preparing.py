@@ -1,9 +1,8 @@
-import configparser
+import json
 import os
 import pickle
-import sys
 import warnings
-import pandas as pd
+
 import requests
 from tqdm import tqdm
 
@@ -13,13 +12,26 @@ photo_url = "https://admin5500.s3.eu-central-1.amazonaws.com"
 with open("photos.pk", "rb") as f:
     photos = pickle.load(f)
 
-data = pd.read_csv("photos.csv", header=None, index_col=0)
 done = os.listdir("data")
 photos_name = [p["name"] for p in photos]
+data = []
 
-config = configparser.RawConfigParser()
-config.read('config.conf')
-PHOTO_COL = int(config.get("SETTING", "photo_url"))
+
+def pfile(f):
+    for line in f.readlines():
+        if line[-1] == "\n":
+            line = line[:-1]
+        dat = json.loads(line)
+        data.append(dat)
+
+
+with open("learning.jsonlines", "r") as f:
+    pfile(f)
+
+with open("input.jsonlines", "r") as f:
+    pfile(f)
+
+print(data)
 
 def load(url):
     name = url.split("/")[-1]
@@ -34,10 +46,10 @@ def load(url):
         print(f"Error {e}: {url}")
 
 
-dnames = [d.split("/")[-1] for d in data[PHOTO_COL]]
-print("Start loading photos", len(set(dnames) ^ set(done)))
-for p in tqdm(list(data[PHOTO_COL][1:])):
-    load(p)
+dnames = [d["photo"].split("/")[-1] for d in data]
+print("Start loading photos")
+for d in tqdm(data):
+    load(d["photo"])
 
 print("Start preparing photos:", len(done) - len(photos_name))
 import tensorflow.compat.v1 as tf
@@ -45,20 +57,20 @@ import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 import tf_pose
 
-for i, photo in tqdm(enumerate(done)):
-    if photo in photos_name:
+for i, d in tqdm(enumerate(data)):
+    if d['photo'] in photos_name:
         continue
     try:
-        coco_style = tf_pose.infer(f"/home/petr/Documents/Projects/Recognition/data/{photo}")
+        coco_style = tf_pose.infer(f"/home/petr/Documents/Projects/Recognition/data/{d['photo']}")
     except Exception as e:
-        print(e, f"data/{photo}")
+        print(e, f"data/{d['photo']}")
         continue
     photos.append({
-        "name": photo,
+        "name": d['photo'] ,
         "points": coco_style,
         "shape": None
     })
-    photos_name.append(photo)
+    photos_name.append(d['photo'])
     if i % 150 == 0:
         with open("photos.pk", "wb") as f:
             pickle.dump(photos, f)
@@ -66,4 +78,4 @@ for i, photo in tqdm(enumerate(done)):
 with open("photos.pk", "wb") as f:
     pickle.dump(photos, f)
 
-print("Complete", len(photos))
+print("Complete", len(data), "total:", len(photos))

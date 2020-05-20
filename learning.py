@@ -1,9 +1,9 @@
 import collections
 import configparser
+import json
 import pickle
 
 import numpy as np
-import pandas as pd
 from catboost import CatBoostClassifier
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
@@ -16,24 +16,25 @@ config.read('config.conf')
 PHOTO_COL = int(config.get("SETTING", "photo_url"))
 RESULT_COL = int(config.get("SETTING", "result"))
 
-table = pd.read_csv("photos.csv", header=None)
-counts = collections.Counter(list(table[RESULT_COL]))
-
 photos = {p["name"]: p for p in photos}
-data = table.to_dict(orient="record")
-print(f"Find classes: {len(set(table[RESULT_COL]))}")
+data = []
+with open("learning.jsonlines", "r") as f:
+    for line in f.readlines():
+        if line[-1] == "\n":
+            line = line[:-1]
+        dat = json.loads(line)
+        dat["photo"] = dat["photo"].split("/")[-1]
+        data.append(dat)
 
-data = [{
-    "photo": d[PHOTO_COL].split("/")[-1],
-    "result": d[RESULT_COL],
-} for d in data]
+counts = collections.Counter([d["result"] for d in data])
+print(f"Find classes: {len(counts)}")
+assert len(counts) > 0, "only one class found"
+
 
 res = []
 for d in data:
     if d['photo'] in photos:
         d.update(photos[d['photo']])
-        if d["result"] is None:
-            continue
         if counts[d["result"]] < 30:
             print("Skip class", d["result"], counts[d["result"]])
             d["result"] = "Прочее"
